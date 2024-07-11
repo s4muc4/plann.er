@@ -12,7 +12,7 @@ class ParticipantsRepository:
                 INSERT INTO participants
                     (id, trip_id, emails_to_invite_id, name)
                 VALUES
-                    (?,?,?,?)
+                    (?, ?, ?, ?)
             ''',(
                 participant_infos["id"],
                 participant_infos["trip_id"],
@@ -21,7 +21,7 @@ class ParticipantsRepository:
             )
         )
         self.__conn.commit()
-                
+
     def find_participants_from_trip(self, trip_id: str) -> List[Tuple]:
         cursor = self.__conn.cursor()
         cursor.execute(
@@ -29,10 +29,8 @@ class ParticipantsRepository:
                 SELECT p.id, p.name, p.is_confirmed, e.email
                 from participants as p
                 JOIN emails_to_invite as e ON e.id = p.emails_to_invite_id
-                WHERE e.trip_id = ?
-            ''',(
-                trip_id, 
-            )
+                WHERE p.trip_id = ?
+            ''', (trip_id,)
         )
         participants = cursor.fetchall()
         return participants
@@ -41,11 +39,10 @@ class ParticipantsRepository:
         cursor = self.__conn.cursor()
         cursor.execute(
             '''
-                UPTADE participants
-                SET is_confirmed = 1
-                WHERE ID = ?
-            ''',(
-                participant_id, 
-            )
+                UPDATE participants
+                    SET is_confirmed = 1
+                WHERE
+                    id = ?
+            ''', (participant_id,)
         )
         self.__conn.commit()
