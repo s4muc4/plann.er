@@ -1,3 +1,5 @@
+//Arquivo usado para descartar arquivos de cache
+
 {
     "files.exclude": {
         "**/*.pyc": { "when": "$(basename).py" },
@@ -5,3 +7,4 @@
         "**/*.pytest_cache":true,
     }
 }
+
